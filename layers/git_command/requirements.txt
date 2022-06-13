@@ -1,2 +1,0 @@
-dulwich
-PyYAML==6.0
