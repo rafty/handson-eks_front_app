@@ -1,10 +1,13 @@
-from app.app import app
-
-app.config['TESTING'] = True
-client = app.test_client()
+from app import app
 
 
-def test_flask_simple():
-    result = client.get('/')
+def test_health_check_ok():
+    result = app.health_check()
+    assert result == 'OK'
 
-    # assert b'root' == result
+
+# def test_health_check():
+#     result = app.health_check_dummy('foo')
+#     assert result == 'bar'
+
+
