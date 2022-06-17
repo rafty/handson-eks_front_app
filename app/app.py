@@ -8,8 +8,8 @@ from wtforms.validators import DataRequired
 import boto3
 
 # 環境変数からバックエンドサービスのURLを取得
-region_name = os.getenv('AWS_DEFAULT_REGION', 'ap-northeast-1')  # Todo: Backendの環境変数を指定すること
-table_name = os.getenv('DYNAMODB_TABLE_NAME', 'messages')  # Todo: Backendの環境変数を指定すること
+region_name = os.getenv('AWS_DEFAULT_REGION', 'ap-northeast-1')
+table_name = os.getenv('DYNAMODB_TABLE_NAME', 'messages')
 
 db = boto3.resource('dynamodb', region_name=region_name)
 table = db.Table(table_name)
