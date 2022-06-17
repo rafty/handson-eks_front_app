@@ -8,7 +8,6 @@ from wtforms.validators import DataRequired
 import boto3
 
 # 環境変数からバックエンドサービスのURLを取得
-# backend_url = os.getenv('BACKEND_URL', 'http://localhost:5050/messages')
 region_name = os.getenv('AWS_DEFAULT_REGION', 'ap-northeast-1')  # Todo: Backendの環境変数を指定すること
 table_name = os.getenv('DYNAMODB_TABLE_NAME', 'messages')  # Todo: Backendの環境変数を指定すること
 
@@ -16,8 +15,8 @@ db = boto3.resource('dynamodb', region_name=region_name)
 table = db.Table(table_name)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'argqtahqtaatayaat'
-# app.config['SECRET_KEY'] = os.urandom(24)
+# app.config['SECRET_KEY'] = 'argqtahqtaatayaat'
+app.config['SECRET_KEY'] = os.urandom(24)
 app.config['JSON_AS_ASCII'] = False  # jsonifyの日本語文字化け対策
 
 
@@ -35,6 +34,7 @@ def home_page():
     print(f'message_item: {message_item}')
     return render_template('home.html', items=message_item, form=form)
 
+
 @app.route('/', methods=['POST'])
 def post_message():
     form = MessageForm()
@@ -49,20 +49,10 @@ def post_message():
     return render_template('home.html', form=form)
 
 
-# curl -X GET https://flask.xxxxxxxx.tk/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
-@app.route('/<message_uuid>', methods=['GET'])
-def get_message(message_uuid):
-    db_response = table.get_item(
-        Key={
-            'uuid': message_uuid
-        }
-    )
-    print(db_response)
-    message_item = db_response['Item']
-    return jsonify(message_item)
-
-
+# ---------------------------------------------------------------------------
+# REST Api Test
 # curl -X POST https://flask.xxxxxxxx.tk/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
+# ---------------------------------------------------------------------------
 @app.route('/<message_uuid>', methods=['POST'])
 def create_message(message_uuid):
     chars = ('a', 'b', 'c', 'd', 'e', 'f', 'g', '1', '2', '3', '4', '5', 'X', 'Y', 'Z')
@@ -74,6 +64,22 @@ def create_message(message_uuid):
     db_response = table.put_item(Item=item)
     print(db_response)
     return jsonify(item)
+
+
+# ---------------------------------------------------------------------------
+# REST Api Test
+# curl -X GET https://flask.xxxxxxxx.tk/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
+# ---------------------------------------------------------------------------
+@app.route('/<message_uuid>', methods=['GET'])
+def get_message(message_uuid):
+    db_response = table.get_item(
+        Key={
+            'uuid': message_uuid
+        }
+    )
+    print(db_response)
+    message_item = db_response['Item']
+    return jsonify(message_item)
 
 
 @app.route('/healthz', methods=['GET'])
