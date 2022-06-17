@@ -26,17 +26,6 @@ class MessageForm(FlaskForm):
     submit = SubmitField()
 
 
-# @app.route('/', methods=['GET'])
-# def home_page():
-#
-#     r = requests.get(backend_url)
-#     r.raise_for_status()
-#     items = r.json()
-#
-#     form = MessageForm()
-#
-#     return render_template('home.html', items=items, form=form)
-
 @app.route('/', methods=['GET'])
 def home_page():
 
@@ -46,18 +35,6 @@ def home_page():
     print(f'message_item: {message_item}')
     return render_template('home.html', items=message_item, form=form)
 
-
-
-
-# @app.route('/', methods=['POST'])
-# def post_message():
-#     form = MessageForm()
-#     if form.validate_on_submit():
-#         json = {'message': form.message.data}
-#         r = requests.post(backend_url, json=json)
-#         r.raise_for_status()
-#         return redirect(url_for('home_page'))
-#     return render_template('home.html', form=form)
 @app.route('/', methods=['POST'])
 def post_message():
     form = MessageForm()
@@ -72,7 +49,7 @@ def post_message():
     return render_template('home.html', form=form)
 
 
-# curl -X GET https://flask.xxxxxxxx.tk:5000/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
+# curl -X GET https://flask.xxxxxxxx.tk/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
 @app.route('/<message_uuid>', methods=['GET'])
 def get_message(message_uuid):
     db_response = table.get_item(
@@ -85,7 +62,7 @@ def get_message(message_uuid):
     return jsonify(message_item)
 
 
-# curl -X POST https://flask.xxxxxxxx.tk:5000/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
+# curl -X POST https://flask.xxxxxxxx.tk/2469dbc9-6eb8-8afa-a328-bb7bdd79922a
 @app.route('/<message_uuid>', methods=['POST'])
 def create_message(message_uuid):
     chars = ('a', 'b', 'c', 'd', 'e', 'f', 'g', '1', '2', '3', '4', '5', 'X', 'Y', 'Z')
