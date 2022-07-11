@@ -33,10 +33,9 @@ def home_page():
     app.logger.info('home_page()')
 
     form = MessageForm()
+
     db_response = table.scan()
     message_item = db_response['Items']
-
-    # print(f'message_item: {message_item}')
     app.logger.info(f'home_page() - message_item: {message_item}')
 
     return render_template('home.html', items=message_item, form=form)
@@ -54,7 +53,6 @@ def post_message():
         }
         db_response = table.put_item(Item=item)
 
-        # print(db_response)
         app.logger.info(f'post_message() - db_response: {db_response}')
 
         return redirect(url_for('home_page'))  # home_page()にredirect
@@ -77,8 +75,6 @@ def create_message(message_uuid):
         'message': message,
     }
     db_response = table.put_item(Item=item)
-
-    # print(db_response)
     app.logger.info(f'create_message() - db_response: {db_response}')
 
     return jsonify(item)
@@ -98,7 +94,6 @@ def get_message(message_uuid):
             'uuid': message_uuid
         }
     )
-    # print(db_response)
     app.logger.info(f'get_message() - db_response: {db_response}')
 
     message_item = db_response['Item']
@@ -108,6 +103,11 @@ def get_message(message_uuid):
 @app.route('/healthz', methods=['GET'])
 def health_check():
     return 'OK'
+
+@app.route('/healthz', methods=['GET'])
+def health_check():
+    return 'OK'
+
 
 
 def health_check_dummy(data: str):
