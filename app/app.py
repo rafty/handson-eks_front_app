@@ -91,7 +91,7 @@ def create_message(message_uuid):
 @app.route('/<message_uuid>', methods=['GET'])
 def get_message(message_uuid):
 
-    app.logger.info('get_message()')
+    app.logger.info(f'get_message() - message_uuid: {message_uuid}')
 
     db_response = table.get_item(
         Key={
@@ -111,6 +111,7 @@ def health_check():
 
 
 def health_check_dummy(data: str):
+    app.logger.info(f'health_check_dummy() - data: {data}')
     return data + 'bar'
 
 
